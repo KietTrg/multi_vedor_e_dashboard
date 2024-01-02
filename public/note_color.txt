@@ -1,0 +1,5 @@
+text: #2B2A4C
+main, btn_trash: #FF494C
+main_bg: #FFC5C5
+bg_pastes: #fdd9d9,ffe7e7
+btn_edit: #65B741
