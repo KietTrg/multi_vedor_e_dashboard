@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { update_product, get_product, messageClear } from '../../store/Reducers/productReducer'
+import { update_product, get_product, product_image_update, messageClear } from '../../store/Reducers/productReducer'
 import { get_category } from '../../store/Reducers/categoryReducer'
 import { BsImage } from 'react-icons/bs'
 import { IoMdClose } from 'react-icons/io'
@@ -102,8 +102,11 @@ const EditProduct = () => {
     }
     const changeImage = (img, files) => {
         if (files.length > 0) {
-            console.log(img)
-            console.log(files[0])
+            dispatch(product_image_update({
+                oldImage: img,
+                newImage: files[0],
+                productId
+            }))
         }
         // console.log('index: ', index);
 
