@@ -128,6 +128,7 @@ const EditProduct = () => {
         setImages(filterImage)
         setNewImg(filterNewImage)
         setImageShow(filterImageUrl)
+        //bug: xoa trc change sau
     }
     const update = (e) => {
         e.preventDefault()
@@ -141,10 +142,13 @@ const EditProduct = () => {
         formData.append('productId', productId)
 
         formData.append('brand', state.brand)
+
         for (let i = 0; i < images.length; i++) {
+            console.log('i_img: ', i);
             formData.append('images', images[i])
         }
         for (let i = 0; i < newImg.length; i++) {
+            console.log('i: ', i);
             formData.append('newImg', newImg[i])
         }
 
