@@ -12,7 +12,7 @@ const EditProduct = () => {
     const dispatch = useDispatch()
     const { productId } = useParams()
     const { categorys } = useSelector(state => state.category)
-    console.log('categorys: ', categorys);
+
     const { product, loader, successMessage, errorMessage } = useSelector(state => state.product)
     // const categorys = [
     //     {
@@ -72,7 +72,7 @@ const EditProduct = () => {
     const [cateShow, setCateShow] = useState(false)
     const [category, setCategory] = useState('')
     const [allCategory, setAllCategory] = useState(categorys)
-    console.log('allCategory: ', allCategory);
+
     const [searchValue, setSearchValue] = useState('')
     const categorySearch = (e) => {
         const value = e.target.value
@@ -85,22 +85,29 @@ const EditProduct = () => {
         }
     }
     const [images, setImages] = useState([])
+    const [newImg, setNewImg] = useState([])
+    console.log('newImg: ', newImg);
+    console.log('images87: ', images);
     const [imageShow, setImageShow] = useState([])
-    const imageHandle = (e) => {
-        const files = e.target.files
+    const imageHandle = (files) => {
         const length = files.length
         if (length > 0) {
-            setImages([...images, ...files])
+            setNewImg([...newImg, ...files])
+
+
             let imageUrl = []
 
             for (let i = 0; i < length; i++) {
-                imageUrl.push({ url: URL.createObjectURL(files[i]) })
+                imageUrl.push(URL.createObjectURL(files[i]))
             }
             console.log('imageShow: ', imageUrl);
             setImageShow([...imageShow, ...imageUrl])
         }
     }
+    console.log('imageShow: ', imageShow);
+
     const changeImage = (img, files) => {
+        console.log('img: ', img);
         if (files.length > 0) {
             dispatch(product_image_update({
                 oldImage: img,
@@ -108,25 +115,41 @@ const EditProduct = () => {
                 productId
             }))
         }
-        // console.log('index: ', index);
-
-        // if (img) {
-        //     let tempUrl = imageShow
-        //     console.log('imageShow: ', imageShow);
-        //     let tempImages = images
-
-        //     tempImages[index] = img
-        //     tempUrl[index] = { url: URL.createObjectURL(img) }
-        //     setImageShow([...tempUrl])
-        //     console.log('tempUrl: ', tempUrl);
-        //     setImages([...tempImages])
-        // }
     }
     const removeImage = (i) => {
+
+        let indexNew
+        if (newImg) {
+            indexNew = i - images.length
+        }
         const filterImage = images.filter((img, index) => index !== i)
         const filterImageUrl = imageShow.filter((img, index) => index !== i)
+        const filterNewImage = newImg.filter((img, index) => index !== indexNew)
         setImages(filterImage)
+        setNewImg(filterNewImage)
         setImageShow(filterImageUrl)
+    }
+    const update = (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('name', state.name)
+        formData.append('description', state.description)
+        formData.append('price', state.price)
+        formData.append('stock', state.stock)
+        formData.append('category', category)
+        formData.append('discount', state.discount)
+        formData.append('productId', productId)
+
+        formData.append('brand', state.brand)
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i])
+        }
+        for (let i = 0; i < newImg.length; i++) {
+            formData.append('newImg', newImg[i])
+        }
+
+        dispatch(update_product(formData))
+
     }
     useEffect(() => {
         setState({
@@ -139,6 +162,7 @@ const EditProduct = () => {
         })
         setCategory(product.category)
         setImageShow(product.images)
+        setImages(product.images)
     }, [product])
     useEffect(() => {
         if (successMessage) {
@@ -153,20 +177,7 @@ const EditProduct = () => {
         }
 
     }, [successMessage, errorMessage])
-    const update = (e) => {
-        e.preventDefault()
-        // const obj = {
-        //     name: state.name,
-        //     description: state.description,
-        //     discount: state.discount,
-        //     price: state.price,
-        //     brand: state.brand,
-        //     stock: state.stock,
-        //     productId: state.productId
-        // }
-        state.productId = productId
-        dispatch(update_product(state))
-    }
+
 
     return (
         <div className='px-2 lg:px-7 pt-5'>
@@ -253,13 +264,20 @@ const EditProduct = () => {
                             <input multiple onChange={imageHandle} 
                             className='hidden' type="file" id="image" /> */}
                             {
-                                imageShow?.map((el, i) => <div>
-                                    <label className='h-[180px]' htmlFor={i}>
-                                        <img className='w-full' src={el} alt="" />
+                                imageShow?.map((el, i) => <div className='relative'>
+                                    <label className='h-[180px] relative' htmlFor={i}>
+                                        <img className='w-full h-full rounded-md' src={el} alt="" />
                                     </label>
                                     <input onChange={(e) => changeImage(el, e.target.files)} type="file" id={i} className='hidden' />
+                                    <span className=' absolute top-1 right-1 p-2 z-10 cursor-pointer hover:bg-[#FF494C] hover:text-white bg-white rounded-full transition-all duration-300' onClick={() => removeImage(i)}><IoMdClose /></span>
                                 </div>)
                             }
+
+                            <label className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed border-black hover:border-red-700 w-full text-[#2a2b4c]' htmlFor="image">
+                                <span><BsImage></BsImage></span>
+                                <span>Select Image</span>
+                            </label>
+                            <input multiple onChange={(e) => imageHandle(e.target.files)} className='hidden' type="file" id="image" />
                         </div>
                         <div className='flex'>
                             <button className=' transition-all duration-500 bg-[#1D976C]  w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'> {

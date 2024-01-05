@@ -1,27 +1,37 @@
-import React from 'react'
+// import React from 'react'
 import { BsChevronBarLeft, BsChevronBarRight } from 'react-icons/bs'
 
-const Pagination = ({ pageNumber, setPageNumber, totalItem, parPage, showItem }) => {
-    let totalPage = Math.ceil(totalItem / parPage)
-    let startPage = pageNumber
 
-    let dif = totalPage - pageNumber
+import React from "react";
 
-    if (dif <= showItem) {
-        startPage = totalPage - showItem
+
+const Pagination = ({
+    pageNumber,
+    setPageNumber,
+    totalItem,
+    parPage,
+    showItem,
+}) => {
+    let totalPage = Math.ceil(totalItem / parPage);
+    let startPage = pageNumber - 1;
+    let dif = totalPage - pageNumber;
+
+    if (dif < showItem) {
+        startPage = totalPage - showItem;
     }
-    let endPage = startPage < 0 ? showItem : showItem + startPage
+    let endPage = startPage < 0 ? showItem : totalPage;
 
     if (startPage <= 0) {
-        startPage = 1
+        startPage = 1;
     }
+
 
     const createBtn = () => {
         const btns = []
-        for (let i = startPage; i < endPage; i++) {
+        for (let index = startPage; index <= totalPage; index++) {
             btns.push(
-                <li onClick={() => setPageNumber(i)} className={`${pageNumber === i ? ' shadow-md bg-[#FF494C] text-white' : 'bg-[#ffe7e7] text-[#2B2A4C] hover:bg-[#FF494C] hover:text-white  transition-all'} w-[33px] h-[33px] rounded-full flex justify-center items-center cursor-pointer`}>
-                    {i}
+                <li onClick={() => setPageNumber(index)} className={`${pageNumber === index ? ' shadow-md bg-[#FF494C] text-white' : 'bg-[#ffe7e7] text-[#2B2A4C] hover:bg-[#FF494C] hover:text-white  transition-all'} w-[33px] h-[33px] rounded-full flex justify-center items-center cursor-pointer`}>
+                    {index}
                 </li>
             )
         }
@@ -44,7 +54,6 @@ const Pagination = ({ pageNumber, setPageNumber, totalItem, parPage, showItem })
             }
         </ul>
     )
-}
+};
 
-
-export default Pagination
+export default Pagination;

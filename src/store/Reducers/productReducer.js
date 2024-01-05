@@ -4,10 +4,12 @@ import api from "../../api/api";
 export const add_product = createAsyncThunk(
   "product/add_product",
   async (product, { rejectWithValue, fulfillWithValue }) => {
+    console.log("product: ", product);
     try {
       const { data } = await api.post("/product-add", product, {
         withCredentials: true,
       });
+      console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -17,10 +19,13 @@ export const add_product = createAsyncThunk(
 export const update_product = createAsyncThunk(
   "product/update_product",
   async (product, { rejectWithValue, fulfillWithValue }) => {
+    console.log("product: ", product);
+
     try {
       const { data } = await api.post("/product-update", product, {
         withCredentials: true,
       });
+      console.log("data: ", data);
 
       return fulfillWithValue(data);
     } catch (error) {
@@ -36,8 +41,9 @@ export const product_image_update = createAsyncThunk(
   ) => {
     try {
       const formData = new FormData();
-      formData.append("oldImage", oldImage);
+      // formData.append("oldImage", oldImage);
       formData.append("newImage", newImage);
+      formData.append("oldImage", oldImage);
       console.log("newImage: ", newImage);
       formData.append("productId", productId);
 
@@ -138,7 +144,7 @@ export const productReducer = createSlice({
       state.product = payload.product;
       state.successMessage = payload.message;
     });
-
+    //update_img
     builder.addCase(product_image_update.fulfilled, (state, { payload }) => {
       state.product = payload.product;
       state.successMessage = payload.message;
