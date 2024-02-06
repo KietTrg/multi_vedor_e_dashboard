@@ -16,6 +16,26 @@ export const add_product = createAsyncThunk(
     }
   }
 );
+export const delete_product = createAsyncThunk(
+  "product/delete_product",
+  async ({ productId }, { rejectWithValue, fulfillWithValue }) => {
+    console.log("productId: ", productId);
+    try {
+      const { data } = await api.post(
+        `/product-delete`,
+        { productId },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("data: ", data);
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 export const update_product = createAsyncThunk(
   "product/update_product",
   async (product, { rejectWithValue, fulfillWithValue }) => {
@@ -145,7 +165,12 @@ export const productReducer = createSlice({
       state.successMessage = payload.message;
     });
     //update_img
+
     builder.addCase(product_image_update.fulfilled, (state, { payload }) => {
+      state.product = payload.product;
+      state.successMessage = payload.message;
+    });
+    builder.addCase(delete_product.fulfilled, (state, { payload }) => {
       state.product = payload.product;
       state.successMessage = payload.message;
     });

@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 import Search from '../components/Search'
 import Pagination from '../Pagination'
 import { Link } from 'react-router-dom'
-import logo_admin from '../../assets/admin.jpg'
+import { toast } from 'react-hot-toast'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { LuEye } from 'react-icons/lu'
+import { formatMoney } from '../../store/helpers'
 import { useSelector, useDispatch } from 'react-redux'
-import { add_product, messageClear, get_product, get_products } from '../../store/Reducers/productReducer'
+import { add_product, messageClear, get_product, get_products, delete_product } from '../../store/Reducers/productReducer'
+import Swal from 'sweetalert2'
 const Products = () => {
     const dispatch = useDispatch()
-    const { products, totalProduct } = useSelector(state => state.product)
+    const { products, totalProduct, successMessage } = useSelector(state => state.product)
     console.log('products: ', products);
     const [parPage, setParPage] = useState(5)
     console.log('parPage: ', parPage);
@@ -24,6 +26,38 @@ const Products = () => {
         }
         dispatch(get_products(obj))
     }, [searchValue, parPage, currentPage])
+    const deleteProduct = (productId) => {
+        Swal.fire({
+            title: 'Are you sure ?',
+            text: "Are you ready remove this category?",
+            icon: "warning",
+            showCancelButton: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                dispatch(delete_product({ productId }))
+
+            }
+        }
+
+        )
+
+
+
+    }
+    useEffect(() => {
+        if (successMessage) {
+            const obj = {
+                parPage: parseInt(parPage),
+                page: parseInt(currentPage),
+                searchValue
+            }
+            toast.success(successMessage)
+            dispatch(get_products(obj))
+            dispatch(messageClear())
+        }
+    }, [successMessage])
+
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full bg-white shadow-md p-4 rounded-md'>
@@ -37,7 +71,7 @@ const Products = () => {
                                 <th scope='col' className='py-3 px-4'>Name</th>
                                 <th scope='col' className='py-3 px-4'>Category</th>
                                 <th scope='col' className='py-3 px-4'>Brand</th>
-                                <th scope='col' className='py-3 px-4'>Price (VND)</th>
+                                <th scope='col' className='py-3 px-4'>Price (VNĐ)</th>
                                 <th scope='col' className='py-3 px-4'>Discount</th>
                                 <th scope='col' className='py-3 px-4'>Stock </th>
                                 <th scope='col' className='py-3 px-4'>Action</th>
@@ -61,7 +95,7 @@ const Products = () => {
                                     <td scope='row' className='py-3
                                              px-4 font-medium whitespace-nowrap'><span>{el.brand}</span></td>
                                     <td scope='row' className='py-3
-                                             px-4 font-medium whitespace-nowrap'><span>{el.price}</span></td>
+                                             px-4 font-medium whitespace-nowrap'><span>{formatMoney(el.price)}</span></td>
                                     <td scope='row' className='py-3
                                              px-4 font-medium whitespace-nowrap'>{el.discount === 0 ? <span>No discount</span> : <span>{el.discount}%</span>}</td>
                                     <td scope='row' className='py-3
@@ -70,8 +104,8 @@ const Products = () => {
                                              px-4 font-medium'>
                                         <div className='flex justify-start  items-center gap-4'>
                                             <Link to={`/seller/dashboard/edit-product/${el._id}`}><FaEdit color='#65B741' size={17} /></Link>
-                                            <Link><LuEye color='#3e59e1' size={17} /></Link>
-                                            <button><FaTrash color='#FF494C' size={17} /></button>
+                                            {/* <Link><LuEye color='#3e59e1' size={17} /></Link> */}
+                                            <button onClick={() => deleteProduct(el._id)}><FaTrash color='#FF494C' size={17} /></button>
                                         </div>
                                     </td>
                                 </tr>)

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { BsImage } from 'react-icons/bs'
 import { IoMdClose } from 'react-icons/io'
 import { useSelector, useDispatch } from 'react-redux'
-import { get_category } from '../../store/Reducers/categoryReducer'
+import { get_categorys } from '../../store/Reducers/categoryReducer'
 import { add_product, messageClear } from '../../store/Reducers/productReducer'
 import { toast } from 'react-hot-toast'
 import { overideStyle } from '../../utils/utils'
@@ -12,6 +12,7 @@ const AddProduct = () => {
     const dispatch = useDispatch()
     const { categorys } = useSelector(state => state.category)
     const { successMessage, errorMessage, loader } = useSelector(state => state.product)
+    const { userInfo } = useSelector(state => state.auth)
     // const categorys = [
     //     {
     //         id: 1,
@@ -39,7 +40,7 @@ const AddProduct = () => {
     //     },
     // ]
     useEffect(() => {
-        dispatch(get_category({
+        dispatch(get_categorys({
             searchValue: '',
             parPage: '',
             page: ''
@@ -124,7 +125,7 @@ const AddProduct = () => {
         formData.append('stock', state.stock)
         formData.append('category', category)
         formData.append('discount', state.discount)
-        formData.append('shopName', 'Kiet Truong shop')
+        formData.append('shopName', userInfo?.shopInfo?.shopName)
         formData.append('brand', state.brand)
         for (let i = 0; i < images.length; i++) {
             formData.append('images', images[i])

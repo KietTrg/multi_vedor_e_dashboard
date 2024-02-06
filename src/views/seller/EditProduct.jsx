@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { update_product, get_product, product_image_update, messageClear } from '../../store/Reducers/productReducer'
-import { get_category } from '../../store/Reducers/categoryReducer'
+import { get_categorys } from '../../store/Reducers/categoryReducer'
 import { BsImage } from 'react-icons/bs'
 import { IoMdClose } from 'react-icons/io'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,7 @@ import { overideStyle } from '../../utils/utils'
 import toast from 'react-hot-toast'
 const EditProduct = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { productId } = useParams()
     const { categorys } = useSelector(state => state.category)
 
@@ -41,7 +42,7 @@ const EditProduct = () => {
     //     },
     // ]
     useEffect(() => {
-        dispatch(get_category({
+        dispatch(get_categorys({
             searchValue: '',
             parPage: '',
             page: ''
@@ -172,7 +173,7 @@ const EditProduct = () => {
         if (successMessage) {
             toast.success(successMessage)
             dispatch(messageClear())
-
+            navigate('/seller/dashboard/all-product')
         }
         if (errorMessage) {
             toast.error(errorMessage)

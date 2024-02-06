@@ -1,17 +1,62 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsImage } from 'react-icons/bs'
 import { FaEdit, FaRegUser } from 'react-icons/fa'
 import { BsShopWindow } from "react-icons/bs";
-import logo_admin from '../../assets/admin.jpg'
+import { toast } from 'react-hot-toast'
 
+import { useDispatch, useSelector } from 'react-redux'
 import {
     HashLoader
 } from 'react-spinners'
+import { profile_image_upload, profile_info_add, messageClear } from '../../store/Reducers/authReducer';
+import { overideStyle } from '../../utils/utils';
 const Profile = () => {
-    const image = true
-    const loader = false
     const status = 'active'
-    const userInfo = false
+    const [state, setState] = useState({
+        shopName: '',
+        Division: '',
+        District: '',
+        subDistrict: '',
+    })
+    const dispatch = useDispatch()
+    const { successMessage, loader, userInfo } = useSelector(state => state.auth)
+    // const [show, setShow] = useState({ userInfo })
+    // const handlShow = () => {
+    //     setShow(!show)
+    //     console.log('show: ', show);
+    // }
+    const add_image = (e) => {
+        if (e.target.files.length > 0) {
+            const formData = new FormData()
+            formData.append('image', e.target.files[0])
+            dispatch(profile_image_upload(formData))
+        }
+    }
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+
+        }
+    }, [successMessage]);
+
+    const inputHandle = (e) => {
+        setState(
+            {
+                ...state,
+                [e.target.name]: e.target.value
+            }
+        )
+    }
+
+    const add = (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append('shopName', state.shopName)
+        formData.append('District', state.District)
+        formData.append('Division', state.Division)
+        formData.append('subDistrict', state.subDistrict)
+        dispatch(profile_info_add(formData))
+    }
     return (
         <div className='px-2 lg:px-7 py-5 '>
             <div className='w-full flex flex-wrap'>
@@ -19,9 +64,9 @@ const Profile = () => {
                     < div className='w-full p-4 bg-white shadow-md rounded-md text-[#2a2b4c]'>
                         <div className='flex justify-start items-center py-3'>
                             {
-                                image ?
+                                userInfo?.image ?
                                     <label htmlFor='img' className='h-[200px] w-[250px] relative cursor-pointer overflow-hidden'>
-                                        <img src={logo_admin} alt="" className=' rounded-md w-full h-full' />
+                                        <img src={userInfo.image} alt="" className=' rounded-md w-full h-full' />
                                         {loader && <div className='bg-white  h-full w-full opacity-80 left-0 top-0 z-20 flex justify-center items-center absolute'>
                                             <span>
                                                 <HashLoader color='#FF494C'></HashLoader>
@@ -39,35 +84,35 @@ const Profile = () => {
 
                                     </label>
                             }
-                            <input type="file" className=' hidden' id='img' />
+                            <input onChange={add_image} type="file" className=' hidden' id='img' />
                         </div>
                         <div className=' py-2 px-0 md:px-5'>
                             <div className='flex justify-between text-sm flex-col gap-3 pb-5 relative border-b border-red-700 '>
                                 <div className='flex items-center'>
                                     <div className='text-xl font-semibold flex items-center gap-2'>
-                                        <span>Truong Kiet</span>
+                                        <span>{userInfo.name}</span>
                                         <span><FaRegUser /></span>
                                     </div>
                                     <div className='right-0  absolute cursor-pointer  transition-all hover:text-[#65B741]'><FaEdit size={17} /></div>
                                 </div>
                                 <div className='flex gap-4'>
                                     <span>Email: </span>
-                                    <span>kietb2016977@student.ctu.edu.vn </span>
+                                    <span>{userInfo.email} </span>
                                 </div>
                                 <div className='flex gap-4'>
                                     <span>Role: </span>
-                                    <span>Seller</span>
+                                    <span>{userInfo.role}</span>
                                 </div>
                                 <div className='flex gap-4'>
                                     <span>Status: </span>
-                                    <span>Active </span>
+                                    <span>{userInfo.status}</span>
                                 </div>
                                 <div className='flex gap-4'>
                                     <span>Payment Account: </span>
                                     <p>
                                         {
                                             status === 'active'
-                                                ? <span className='text-green-700 font-normal'>pending </span>
+                                                ? <span className='text-green-700 font-normal'>{userInfo.payment} </span>
                                                 : <span className=' text-blue-800  cursor-pointer  font-normal'>click active </span>
                                         }
                                     </p>
@@ -76,44 +121,48 @@ const Profile = () => {
                         </div>
                         <div className='py-2 px-0 md:px-5 '>
                             {
-                                userInfo ?
-                                    <form className='flex flex-col gap-2'>
+                                !userInfo?.shopInfo ?
+                                    // !show ?
+                                    <form onSubmit={add} className='flex flex-col gap-2'>
                                         <div className='flex flex-col gap-1 w-full'>
                                             <label htmlFor="Shop">Shop Name</label>
-                                            <input type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Shop name' id='Shop' name='shopName' />
+                                            <input onChange={inputHandle} value={state.shopName} type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Shop name' id='Shop' name='shopName' />
                                         </div>
                                         <div className='flex flex-col gap-1 w-full'>
                                             <label htmlFor="Division">Division</label>
-                                            <input type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Division' id='Division' name='Division' />
+                                            <input onChange={inputHandle} value={state.Division} type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Division' id='Division' name='Division' />
                                         </div>
                                         <div className='flex flex-col gap-1 w-full'>
                                             <label htmlFor="District">District</label>
-                                            <input type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='District' id='District' name='District' />
+                                            <input onChange={inputHandle} value={state.District} type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='District' id='District' name='District' />
                                         </div>
                                         <div className='flex flex-col gap-1 w-full'>
                                             <label htmlFor="Sub">Sub District</label>
-                                            <input type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Sub district' id='sub' name='subDistrict' />
+                                            <input onChange={inputHandle} value={state.subDistrict} type="text" className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' placeholder='Sub district' id='sub' name='subDistrict' />
                                         </div>
-                                        <button className=' transition-all duration-500 bg-[#1D976C]  px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'>Add</button>
+                                        <button className=' transition-all duration-500 bg-[#1D976C]  w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'> {
+                                            loader ?
+                                                <HashLoader cssOverride={overideStyle} size='25' color='#fff' /> : 'Update Info'}
+                                        </button>
                                     </form> : <div className='flex justify-between text-sm flex-col gap-3 pb-5 relative '>
                                         <div className='flex items-center'>
                                             <div className='text-xl font-semibold flex items-center gap-2'>
-                                                <span>Truong Kiet Shop</span>
+                                                <span>{userInfo.shopInfo.shopName}</span>
                                                 <span><BsShopWindow /></span>
                                             </div>
-                                            <div className='right-0  absolute cursor-pointer  transition-all hover:text-[#65B741]'><FaEdit size={17} /></div>
+                                            <div /*onClick={handlShow}*/ className='right-0  absolute cursor-pointer  transition-all hover:text-[#65B741]'><FaEdit size={17} /></div>
                                         </div>
                                         <div className='flex gap-4'>
                                             <span>Division: </span>
-                                            <span>Q.Ninh Kieu</span>
+                                            <span>{userInfo.shopInfo.Division}</span>
                                         </div>
                                         <div className='flex gap-4'>
                                             <span>District: </span>
-                                            <span>Xuan Khanh</span>
+                                            <span>{userInfo.shopInfo.District}</span>
                                         </div>
                                         <div className='flex gap-4'>
                                             <span>Sub District: </span>
-                                            <span>3/2 </span>
+                                            <span>{userInfo.shopInfo.subDistrict} </span>
                                         </div>
                                     </div>
                             }
@@ -137,7 +186,10 @@ const Profile = () => {
                                     <label htmlFor="email">New Password</label>
                                     <input className='px-3 py-1 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden w-full' type="password" placeholder='New Password' />
                                 </div>
-                                <button className=' transition-all duration-500 bg-[#1D976C]  px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'>Update</button>
+                                <button className=' transition-all duration-500 bg-[#1D976C]  w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'> {
+                                    loader ?
+                                        <HashLoader cssOverride={overideStyle} size='25' color='#fff' /> : 'Update'}
+                                </button>
                             </form>
                         </div>
                     </div>

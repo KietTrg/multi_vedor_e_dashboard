@@ -8,14 +8,16 @@ import { IoMdClose } from "react-icons/io";
 import {
     HashLoader
 } from 'react-spinners'
+import Swal from 'sweetalert2'
 import { toast } from 'react-hot-toast'
 import { overideStyle } from '../../utils/utils'
 import { useSelector, useDispatch } from 'react-redux'
-import { categoryAdd, messageClear, get_category } from '../../store/Reducers/categoryReducer'
+import { categoryAdd, messageClear, get_categorys, delete_category } from '../../store/Reducers/categoryReducer'
 import Search from '../components/Search'
 const Category = () => {
     const dispatch = useDispatch()
-    const { loader, errorMessage, successMessage, categorys } = useSelector(state => state.category)
+    const { loader, errorMessage, successMessage, categorys, totalCategory } = useSelector(state => state.category)
+
     const [parPage, setParPage] = useState(5)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
@@ -39,15 +41,37 @@ const Category = () => {
         e.preventDefault()
         dispatch(categoryAdd(state))
     }
+    const deleteCategory = (categoryId) => {
+        Swal.fire({
+            title: 'Are you sure ?',
+            text: "Are you ready remove this category?",
+            icon: "warning",
+            showCancelButton: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+
+                dispatch(delete_category({ categoryId }))
+            }
+        }
+
+        )
+
+    }
     useEffect(() => {
+        const obj = {
+            parPage: parseInt(parPage),
+            page: parseInt(currentPage),
+            searchValue
+        }
         if (successMessage) {
             toast.success(successMessage)
+            dispatch(get_categorys(obj))
             dispatch(messageClear())
             setState({
-                name: ' ',
-                image: ' '
+                name: '',
+                image: ''
             })
-            setImageShow(' ')
+            setImageShow('')
         }
         if (errorMessage) {
             toast.error(errorMessage)
@@ -55,14 +79,14 @@ const Category = () => {
 
         }
 
-    }, [successMessage, errorMessage])
+    }, [successMessage, errorMessage, searchValue, parPage, currentPage])
     useEffect(() => {
         const obj = {
             parPage: parseInt(parPage),
             page: parseInt(currentPage),
             searchValue
         }
-        dispatch(get_category(obj))
+        dispatch(get_categorys(obj))
     }, [searchValue, parPage, currentPage])
 
     return (
@@ -99,8 +123,8 @@ const Category = () => {
                                             <td scope='row' className='py-3
                                              px-4 font-medium'>
                                                 <div className='flex justify-start  items-center gap-4'>
-                                                    <Link><FaEdit color='#65B741' size={17} /></Link>
-                                                    <Link><FaTrash color='#FF494C' size={17} /></Link>
+                                                    <Link to={`/admin/dashboard/edit-category/${el._id}`}><FaEdit color='#65B741' size={17} /></Link>
+                                                    <button onClick={() => deleteCategory(el._id)}><FaTrash color='#FF494C' size={17} /></button>
                                                 </div>
                                             </td>
                                         </tr>)
@@ -112,14 +136,14 @@ const Category = () => {
                             <Pagination
                                 pageNumber={currentPage}
                                 setPageNumber={setCurrentPage}
-                                totalItem={50}
+                                totalItem={totalCategory}
                                 parPage={parPage}
                                 showItem={3}
                             />
                         </div>
                     </div>
                 </div>
-                <div className={`w-[320px] lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${show ? 'right-0' : '-right-[340px]'} z-[9999] top-0 transition-all duration-500 `}>
+                <div className={`w-[320px] lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${show ? 'right-0' : '-right-[340px]'} z-10 top-0 transition-all duration-500 `}>
                     <div className='w-full pl-5'>
                         <div className=' bg-white shadow-md rounded-md h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#2B2A4C]'>
                             <div className='flex justify-between items-center mb-4'>
@@ -129,11 +153,11 @@ const Category = () => {
                             <form onSubmit={add_category}>
                                 <div className='flex flex-col w-full gap-2 mb-3'>
                                     <label htmlFor="name">Category Name</label>
-                                    <input required value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2B2A4C] focus:border-[#FF494C] overflow-hidden' type="text" id='name' name='category_name' placeholder='category name' />
+                                    <input required value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2B2A4C] focus:border-[#3a4d39] overflow-hidden' type="text" id='name' name='category_name' placeholder='category name' />
                                 </div>
                                 <div>
 
-                                    <label className='flex rounded-md justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-[#FF494C] w-full border-[#2B2A4C]' htmlFor="image">
+                                    <label className='flex rounded-md justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-[#3a4d39] w-full border-[#2B2A4C]' htmlFor="image">
                                         {
                                             imageShow ? <img className=' h-full w-fit' src={imageShow} /> :
                                                 <>

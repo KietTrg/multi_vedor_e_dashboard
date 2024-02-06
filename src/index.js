@@ -15,10 +15,10 @@ root.render(
         <App />
         <Toaster
           toastOptions={{
-            position: "top-right",
+            position: "top-center",
             style: {
-              background: "#283046",
-              color: "white",
+              background: "white",
+              color: "#3a4d39",
             },
           }}
         />

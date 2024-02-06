@@ -63,6 +63,34 @@ export const get_user_info = createAsyncThunk(
     }
   }
 );
+export const profile_image_upload = createAsyncThunk(
+  "auth/profile_image_upload",
+  async (image, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/profile-image-upload", image, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const profile_info_add = createAsyncThunk(
+  "auth/profile_info_add",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/profile-info-add", info, {
+        withCredentials: true,
+      });
+      console.log("data: ", data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const returnRole = (token) => {
   if (token) {
@@ -141,6 +169,22 @@ export const authReducer = createSlice({
     builder.addCase(get_user_info.fulfilled, (state, { payload }) => {
       state.loader = false;
       state.userInfo = payload.userInfo;
+      state.role = payload.userInfo.role;
+    });
+
+    builder.addCase(profile_image_upload.fulfilled, (state, { payload }) => {
+      state.loader = false;
+      state.userInfo = payload.userInfo;
+      state.successMessage = payload.message;
+    });
+
+    builder.addCase(profile_info_add.pending, (state, _) => {
+      state.loader = true;
+    });
+    builder.addCase(profile_info_add.fulfilled, (state, { payload }) => {
+      state.loader = false;
+      state.userInfo = payload.userInfo;
+      state.successMessage = payload.message;
     });
   },
 });

@@ -30,7 +30,7 @@ const Pagination = ({
         const btns = []
         for (let index = startPage; index <= totalPage; index++) {
             btns.push(
-                <li onClick={() => setPageNumber(index)} className={`${pageNumber === index ? ' shadow-md bg-[#FF494C] text-white' : 'bg-[#ffe7e7] text-[#2B2A4C] hover:bg-[#FF494C] hover:text-white  transition-all'} w-[33px] h-[33px] rounded-full flex justify-center items-center cursor-pointer`}>
+                <li onClick={() => setPageNumber(index)} className={`${pageNumber === index ? ' shadow-md bg-[#3a4d39] text-white' : 'bg-[#ffe7e7] text-[#2B2A4C] hover:bg-[#3a4d39] hover:text-white  transition-all'} w-[33px] h-[33px] rounded-full flex justify-center items-center cursor-pointer`}>
                     {index}
                 </li>
             )
