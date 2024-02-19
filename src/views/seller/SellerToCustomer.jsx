@@ -50,6 +50,7 @@ const SellerToCustomer = () => {
     useEffect(() => {
         socket.on('customer_message', e => {
             setReceverMessage(e)
+
         })
         // socket.on('activeSeller', (sellers) => {
         //     setActiveSeller(sellers)
@@ -57,14 +58,16 @@ const SellerToCustomer = () => {
     }, [])
     useEffect(() => {
         if (receverMessage) {
+
             if (customerId === receverMessage.senderId && userInfo._id === receverMessage.receverId) {
                 dispatch(updateMessage(receverMessage))
             }
         } else {
-            toast.success(receverMessage.senderName + ' ' + 'send a message')
+            toast.success(receverMessage.senderName + ' send a message')
             dispatch(messageClear())
         }
     }, [receverMessage])
+
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages])
