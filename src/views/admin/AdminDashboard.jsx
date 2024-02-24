@@ -1,24 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoIosApps } from "react-icons/io";
 import { LuUsers } from "react-icons/lu";
 import { HiOutlineDocumentText } from "react-icons/hi";
 import Chart from 'react-apexcharts'
 import logo_admin from '../../assets/admin.jpg'
+import { get_admin_dashboard } from '../../store/Reducers/dashboardReducer';
+import { useDispatch, useSelector } from 'react-redux'
+import moment from 'moment';
+import { formatMoney } from '../../store/helpers';
 const AdminDashboard = () => {
+  const { userInfo } = useSelector(state => state.auth)
+  const dispatch = useDispatch()
+  const { totalSale,
+    totalOrder,
+    totalProduct,
+    totalSeller,
+    recentOrders,
+    recentMessage,
+    resultMoney,
+    resultOrder,
+    resultSeller,
+
+  } = useSelector(state => state.dashboard)
+  useEffect(() => {
+    dispatch(get_admin_dashboard())
+  }, [])
   const state = {
     series: [
       {
         name: "Orders",
-        data: [34, 65, 43, 65, 34, 34, 34, 56, 23, 67, 23, 45]
+        data: resultOrder
       },
       {
-        name: "Revenue",
-        data: [34, 32, 34, 25, 34, 34, 34, 56, 33, 67, 23, 78]
+        name: "Revenue (1/1000)",
+        data: resultMoney
       },
       {
         name: "Seller",
-        data: [78, 32, 34, 54, 65, 34, 34, 56, 23, 67, 43, 45]
+        data: resultSeller
       },
     ],
     options: {
@@ -31,7 +51,7 @@ const AdminDashboard = () => {
       },
       chart: {
         background: "transparent",
-        foreColor: '#d0d2d6'
+        foreColor: '#000'
       },
       dataLabels: {
         enabled: false
@@ -80,7 +100,7 @@ const AdminDashboard = () => {
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
         <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
           <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-            <h2 className='text-3xl font-bold'>6665đ</h2>
+            <h2 className='text-3xl font-bold'>{formatMoney(totalSale)}đ</h2>
             <span className='text-md font-medium'>Total Sale</span>
           </div>
           <div className='w-[54px] h-[54px] rounded-full bg-[#28c76f1f] flex justify-center items-center text-xl'>
@@ -89,7 +109,7 @@ const AdminDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
           <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-            <h2 className='text-3xl font-bold'>65</h2>
+            <h2 className='text-3xl font-bold'>{totalProduct}</h2>
             <span className='text-md font-medium'>Products</span>
           </div>
           <div className='w-[54px] h-[54px] rounded-full bg-[#e000e81f] flex justify-center items-center text-xl'>
@@ -98,7 +118,7 @@ const AdminDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
           <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-            <h2 className='text-3xl font-bold'>30</h2>
+            <h2 className='text-3xl font-bold'>{totalSeller}</h2>
             <span className='text-md font-medium'>Sellers</span>
           </div>
           <div className='w-[54px] h-[54px] rounded-full bg-[#00cfe81f] flex justify-center items-center text-xl'>
@@ -107,7 +127,7 @@ const AdminDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
           <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-            <h2 className='text-3xl font-bold'>665</h2>
+            <h2 className='text-3xl font-bold'>{totalOrder}</h2>
             <span className='text-md font-medium'>Orders</span>
           </div>
           <div className='w-[54px] h-[54px] rounded-full bg-[#7367f01f] flex justify-center items-center text-xl'>
@@ -129,48 +149,29 @@ const AdminDashboard = () => {
             </div>
             <div className='flex flex-col gap-2 pt-6 text-[#2B2A4C]'>
               <ol className='relative border-1 border-red-400 ml-4' >
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                    <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                  </div>
-                  <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                    <div className='flex justify-between items-center mb-2' >
-                      <Link className='text-md font-normal'>Admin</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                      how are you
-                    </div>
-                  </div>
-                </li>
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                    <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                  </div>
-                  <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                    <div className='flex justify-between items-center mb-2' >
-                      <Link className='text-md font-normal'>Admin</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                      how are you
-                    </div>
-                  </div>
-                </li>
-                <li className='mb-3 ml-6'>
-                  <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                    <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                  </div>
-                  <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                    <div className='flex justify-between items-center mb-2' >
-                      <Link className='text-md font-normal'>Admin</Link>
-                      <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
-                    </div>
-                    <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                      how are you
-                    </div>
-                  </div>
-                </li>
+                {
+                  recentMessage.map((el, i) =>
+                    <li className='mb-3 ml-6'>
+                      <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
+                        {
+                          el.senderId === userInfo._id ? <img className='w-full h-full rounded-full ' src={userInfo.image} alt="" /> : <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
+                        }
+                      </div>
+                      <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
+                        <div className='flex justify-between items-center mb-2' >
+                          <Link className='text-md font-normal'>{el.senderName}</Link>
+                          <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>{moment(el.createdAt).startOf('hour').fromNow()}</time>
+                        </div>
+                        <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
+                          {el.message}
+                        </div>
+                      </div>
+                    </li>
+
+                  )
+                }
+
+
               </ol>
             </div>
           </div>
@@ -179,7 +180,7 @@ const AdminDashboard = () => {
       <div className='w-full p-4  bg-white shadow-md rounded-md mt-6'>
         <div className='flex justify-between items-center'>
           <h2 className='pb-3 font-semibold text-lg text-[#2B2A4C]'>Receny Order</h2>
-          <Link className='font-semibold text-sm text-[#2B2A4C]'>View All</Link>
+          <Link to='/admin/dashboard/order' className='font-semibold text-sm text-[#2B2A4C]'>View All</Link>
         </div>
         <div className='relative overflow-x-auto'>
           <table className='w-full text-sm text-left text-[#2B2A4C]'>
@@ -194,12 +195,12 @@ const AdminDashboard = () => {
             </thead>
             <tbody>
               {
-                [1, 2, 3, 4, 5, 6].map((el, key) => <tr key={key}>
-                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>#452541101545</td>
-                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>1545</td>
-                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>pending</span></td>
-                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>pending</span></td>
-                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><Link>view</Link></td>
+                recentOrders.map((el, key) => <tr key={key}>
+                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>#{el._id}</td>
+                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>{formatMoney(el?.price)}</td>
+                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.paymentStatus}</span></td>
+                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.deliveryStatus}</span></td>
+                  <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><Link to={`/admin/dashboard/order/details/${el?._id}`}>view</Link></td>
                 </tr>)
               }
 

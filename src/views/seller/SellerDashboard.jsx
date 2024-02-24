@@ -1,29 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { IoIosApps } from "react-icons/io";
 import { GrCart } from "react-icons/gr";
 import { HiOutlineDocumentText } from "react-icons/hi";
-import { LuUsers } from "react-icons/lu";
+import { formatMoney } from '../../store/helpers'
 import Chart from 'react-apexcharts'
+import moment from 'moment'
 import logo_admin from '../../assets/admin.jpg'
+import { useSelector, useDispatch } from 'react-redux'
+import { get_seller_dashboard } from '../../store/Reducers/dashboardReducer';
 const SellerDashboard = () => {
+    const { userInfo } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
+    const { totalSale,
+        totalOrder,
+        totalProduct,
+        totalPendingOrder,
+        recentOrders,
+        recentMessage,
+        resultOrder,
+        resultMoney
+    } = useSelector(state => state.dashboard)
+    useEffect(() => {
+        dispatch(get_seller_dashboard())
+    }, [])
     const state = {
         series: [
             {
                 name: "Orders",
-                data: [34, 65, 43, 65, 34, 34, 34, 56, 23, 67, 23, 45]
+                data: resultOrder
+
             },
             {
                 name: "Revenue",
-                data: [34, 32, 34, 25, 34, 34, 34, 56, 33, 67, 23, 78]
+                data: resultMoney
             },
-            {
-                name: "Seller",
-                data: [78, 32, 34, 54, 65, 34, 34, 56, 23, 67, 43, 45]
-            },
+
         ],
         options: {
-            colors: ['#DC8686', '#F0DBAF', '#7ED7C1'],
+            colors: ['#DC8686', '#F0DBAF'],
             // color: ['#181ee8','#181ee8'],
             plotOptions: {
                 bar: {
@@ -81,7 +96,7 @@ const SellerDashboard = () => {
             <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
                     <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-                        <h2 className='text-3xl font-bold'>6665đ</h2>
+                        <h2 className='text-3xl font-bold'>{formatMoney(totalSale)}đ</h2>
                         <span className='text-md font-medium'>Total Sale</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#28c76f1f] flex justify-center items-center text-xl'>
@@ -90,7 +105,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
                     <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-                        <h2 className='text-3xl font-bold'>65</h2>
+                        <h2 className='text-3xl font-bold'>{totalProduct}</h2>
                         <span className='text-md font-medium'>Products</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#e000e81f] flex justify-center items-center text-xl'>
@@ -99,7 +114,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
                     <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-                        <h2 className='text-3xl font-bold'>30</h2>
+                        <h2 className='text-3xl font-bold'>{totalOrder}</h2>
                         <span className='text-md font-medium'>Orders</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#00cfe81f] flex justify-center items-center text-xl'>
@@ -108,7 +123,7 @@ const SellerDashboard = () => {
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
                     <div className='flex flex-col justify-start items-start text-[#2B2A4C]'>
-                        <h2 className='text-3xl font-bold'>665</h2>
+                        <h2 className='text-3xl font-bold'>{totalPendingOrder}</h2>
                         <span className='text-md font-medium'>Pending Orders</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#7367f01f] flex justify-center items-center text-xl'>
@@ -130,48 +145,26 @@ const SellerDashboard = () => {
                         </div>
                         <div className='flex flex-col gap-2 pt-6 text-[#2B2A4C]'>
                             <ol className='relative border-1 border-red-400 ml-4' >
-                                <li className='mb-3 ml-6'>
-                                    <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                                        <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                                    </div>
-                                    <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                                        <div className='flex justify-between items-center mb-2' >
-                                            <Link className='text-md font-normal'>Customer Name</Link>
-                                            <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
+                                {recentMessage.map((el, i) =>
+                                    <li className='mb-3 ml-6'>
+                                        <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
+                                            {
+                                                el.senderId === userInfo._id ? <img className='w-full h-full rounded-full ' src={userInfo.image} alt="" /> : <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
+                                            }
                                         </div>
-                                        <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                                            how are you
+                                        <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
+                                            <div className='flex justify-between items-center mb-2' >
+                                                <Link className='text-md font-normal'>{el.senderName}</Link>
+                                                <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>{moment(el.createdAt).startOf('hour').fromNow()}</time>
+                                            </div>
+                                            <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
+                                                {el.message}
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li className='mb-3 ml-6'>
-                                    <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                                        <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                                    </div>
-                                    <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                                        <div className='flex justify-between items-center mb-2' >
-                                            <Link className='text-md font-normal'>Seller name</Link>
-                                            <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
-                                        </div>
-                                        <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                                            how are you
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className='mb-3 ml-6'>
-                                    <div className='flex absolute -left-5  justify-center items-center w-10 h-10 p-[6px] rounded-full z-10 bg-[#fdd9d9]'>
-                                        <img className='w-full h-full rounded-full ' src={logo_admin} alt="" />
-                                    </div>
-                                    <div className='p-3 bg-white shadow-md rounded-lg border border-red-600'>
-                                        <div className='flex justify-between items-center mb-2' >
-                                            <Link className='text-md font-normal'>Customer name</Link>
-                                            <time className='mb-1 text-sm font-normal sm:order-last sm:mb-0'>4 day ago</time>
-                                        </div>
-                                        <div className='p-2 text-xs font-normal rounded-md bg-[#fdd9d9]'>
-                                            how are you
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                )}
+
+
                             </ol>
                         </div>
                     </div>
@@ -180,7 +173,7 @@ const SellerDashboard = () => {
             <div className='w-full p-4  bg-white shadow-md rounded-md mt-6'>
                 <div className='flex justify-between items-center'>
                     <h2 className='pb-3 font-semibold text-lg text-[#2B2A4C]'>Receny Order</h2>
-                    <Link className='font-semibold text-sm text-[#2B2A4C]'>View All</Link>
+                    <Link to='/seller/dashboard/orders' className='font-semibold text-sm text-[#2B2A4C]'>View All</Link>
                 </div>
                 <div className='relative overflow-x-auto'>
                     <table className='w-full text-sm text-left text-[#2B2A4C]'>
@@ -195,12 +188,12 @@ const SellerDashboard = () => {
                         </thead>
                         <tbody>
                             {
-                                [1, 2, 3, 4, 5, 6].map((el, key) => <tr key={key}>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>#452541101545</td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>1545</td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>pending</span></td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>pending</span></td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><Link>view</Link></td>
+                                recentOrders.map((el, key) => <tr key={key}>
+                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>#{el._id}</td>
+                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>{formatMoney(el?.price)}</td>
+                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.paymentStatus}</span></td>
+                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.deliveryStatus}</span></td>
+                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><Link to={`/seller/dashboard/order/details/${el._id}`}>view</Link></td>
                                 </tr>)
                             }
 

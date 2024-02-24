@@ -123,7 +123,7 @@ const Category = () => {
                                             <td scope='row' className='py-3
                                              px-4 font-medium'>
                                                 <div className='flex justify-start  items-center gap-4'>
-                                                    <Link to={`/admin/dashboard/edit-category/${el._id}`}><FaEdit color='#65B741' size={17} /></Link>
+                                                    {/* <Link to={`/admin/dashboard/edit-category/${el._id}`}><FaEdit color='#65B741' size={17} /></Link> */}
                                                     <button onClick={() => deleteCategory(el._id)}><FaTrash color='#FF494C' size={17} /></button>
                                                 </div>
                                             </td>

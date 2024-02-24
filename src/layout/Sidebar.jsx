@@ -5,6 +5,7 @@ import { getNavs } from '../navigation/index'
 import { BiLogInCircle } from 'react-icons/bi'
 import logo from '../assets/logo.png'
 import { seller_logout } from '../store/Reducers/authReducer'
+
 const Sidebar = ({ showSidebar, setShowSidebar }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()

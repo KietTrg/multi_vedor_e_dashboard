@@ -10,8 +10,9 @@ import {
 } from 'react-spinners'
 import { profile_image_upload, profile_info_add, messageClear } from '../../store/Reducers/authReducer';
 import { overideStyle } from '../../utils/utils';
+import { create_stripe_connect_account } from '../../store/Reducers/sellerReducer';
 const Profile = () => {
-    const status = 'active'
+
     const [state, setState] = useState({
         shopName: '',
         Division: '',
@@ -111,9 +112,9 @@ const Profile = () => {
                                     <span>Payment Account: </span>
                                     <p>
                                         {
-                                            status === 'active'
+                                            userInfo?.payment === 'active'
                                                 ? <span className='text-green-700 font-normal'>{userInfo.payment} </span>
-                                                : <span className=' text-blue-800  cursor-pointer  font-normal'>click active </span>
+                                                : <button onClick={() => dispatch(create_stripe_connect_account())} className=' text-blue-800  cursor-pointer  font-normal'>click active </button>
                                         }
                                     </p>
                                 </div>

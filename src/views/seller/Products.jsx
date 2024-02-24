@@ -26,25 +26,38 @@ const Products = () => {
         }
         dispatch(get_products(obj))
     }, [searchValue, parPage, currentPage])
-    const deleteProduct = (productId) => {
-        Swal.fire({
-            title: 'Are you sure ?',
-            text: "Are you ready remove this category?",
-            icon: "warning",
-            showCancelButton: true,
-        }).then(async (result) => {
-            if (result.isConfirmed) {
 
-                dispatch(delete_product({ productId }))
+    const deleteProduct = (el, status) => {
+        if (el?.status === "active") {
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "Are you ready hide this product?",
+                icon: "warning",
+                showCancelButton: true,
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    dispatch(delete_product({ productId: el._id, status }))
 
+                }
             }
+            )
         }
+        else {
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "Are you ready show this product?",
+                icon: "warning",
+                showCancelButton: true,
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    dispatch(delete_product({ productId: el._id, status }))
 
-        )
-
-
-
+                }
+            }
+            )
+        }
     }
+
     useEffect(() => {
         if (successMessage) {
             const obj = {
@@ -105,7 +118,12 @@ const Products = () => {
                                         <div className='flex justify-start  items-center gap-4'>
                                             <Link to={`/seller/dashboard/edit-product/${el._id}`}><FaEdit color='#65B741' size={17} /></Link>
                                             {/* <Link><LuEye color='#3e59e1' size={17} /></Link> */}
-                                            <button onClick={() => deleteProduct(el._id)}><FaTrash color='#FF494C' size={17} /></button>
+
+
+                                            {
+                                                el.status === "active" ?
+                                                    <button onClick={() => deleteProduct(el, "deactive")}>Deactive</button> :
+                                                    <button onClick={() => deleteProduct(el, "active")}>Active</button>}
                                         </div>
                                     </td>
                                 </tr>)

@@ -18,12 +18,12 @@ export const add_product = createAsyncThunk(
 );
 export const delete_product = createAsyncThunk(
   "product/delete_product",
-  async ({ productId }, { rejectWithValue, fulfillWithValue }) => {
+  async ({ productId, status }, { rejectWithValue, fulfillWithValue }) => {
     console.log("productId: ", productId);
     try {
       const { data } = await api.post(
         `/product-delete`,
-        { productId },
+        { productId, status },
         {
           withCredentials: true,
         }

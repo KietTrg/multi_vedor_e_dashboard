@@ -7,8 +7,10 @@ import { formatMoney } from '../../store/helpers'
 import { toast } from 'react-hot-toast'
 const OrderDetails = () => {
     const { orderId } = useParams()
+    console.log('orderId: ', orderId);
     const dispatch = useDispatch()
     const { order, successMessage, errorMessage } = useSelector(state => state.order)
+    console.log('order: ', order);
     useEffect(() => {
         dispatch(get_admin_order(orderId))
     }, [orderId])
@@ -50,8 +52,8 @@ const OrderDetails = () => {
                 </div>
                 <div className='p-4'>
                     <div className='flex gap-2 text-lg text-[#2B2A4C]'>
-                        <h2>#{order._id},</h2>
-                        <span>{order.date}</span>
+                        <h2>#{order?._id},</h2>
+                        <span>{order?.date}</span>
                     </div>
                     <div className='flex flex-wrap'>
                         <div className='w-[32%]'>
@@ -59,30 +61,30 @@ const OrderDetails = () => {
                                 <div className='flex flex-col gap-1'>
                                     <h2 className='pb-2 font-semibold'>Deliver to: {order?.shippingInfo?.name}</h2>
                                     <p>
-                                        <span className='sm'>{order.shippingInfo?.address
-                                        },{order.shippingInfo?.province} {order.shippingInfo?.city} {order.shippingInfo?.area}</span>
+                                        <span className='sm'>{order?.shippingInfo?.address
+                                        },{order?.shippingInfo?.province} {order?.shippingInfo?.city} {order?.shippingInfo?.area}</span>
                                     </p>
                                 </div>
                                 <div className='flex  justify-start items-center gap-3'>
                                     <h2>Payment Status: </h2>
-                                    <span className='text-base'>{order.paymentStatus
+                                    <span className='text-base'>{order?.paymentStatus
                                     }</span>
                                 </div>
-                                <span>Price: {order.price && formatMoney(order?.price)
+                                <span>Price: {order?.price && formatMoney(order?.price)
                                 } vnd</span>
                                 <div className='mt-4 flex flex-col gap-4'>
                                     <div className='text-[#2B2A4C]'>
                                         {
-                                            order.products && order.products.map((el, i) =>
+                                            order?.products && order?.products.map((el, i) =>
                                                 <div className='flex gap-3 text-md'>
                                                     <img className='w-[45px] h-[45px] rounded-md' src={el.images[0]} alt="" />
                                                     <div>
-                                                        <h2>{el.name
+                                                        <h2>{el?.name
                                                         }</h2>
                                                         <p>
                                                             <span>Brand: </span>
-                                                            <span>{el.brand} </span>
-                                                            <span className='text-lg'>Quantity: {el.quantity}</span>
+                                                            <span>{el?.brand} </span>
+                                                            <span className='text-lg'>Quantity: {el?.quantity}</span>
                                                         </p>
                                                     </div>
                                                 </div>

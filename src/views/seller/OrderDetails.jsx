@@ -1,73 +1,93 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logo_admin from '../../assets/admin.jpg'
+import { useDispatch, useSelector } from 'react-redux'
+import { seller_order_update_status, get_seller_order, messageClear } from '../../store/Reducers/orderReducer'
+import { useParams } from 'react-router-dom'
+import { formatMoney } from '../../store/helpers'
+import { toast } from 'react-hot-toast'
 
 const OrderDetails = () => {
+    const { orderId } = useParams()
+    // console.log('orderId: ', orderId);
+    const dispatch = useDispatch()
+    const { order, successMessage, errorMessage } = useSelector(state => state.order)
+    // console.log('order: ', order);
+    useEffect(() => {
+        dispatch(get_seller_order(orderId))
+    }, [orderId])
+    const [status, setStatus] = useState('')
+    useEffect(() => {
+        setStatus(order?.deliveryStatus)
+    }, [order])
+    const update_status = (e) => {
+
+        const status = e.target.value
+        setStatus(status)
+        // console.log('status: ', status);
+        dispatch(seller_order_update_status({ orderId, info: { status } }))
+    }
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+
+        }
+    }, [successMessage, errorMessage, orderId])
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4 bg-white shadow-md rounded-md'>
                 <div className='flex justify-between items-center p-4'>
                     <h2 className='text-xl text-[#2B2A4C]'>Order Details</h2>
-                    <select className='px-4 py-2 focus:border-red-500 ouline-none bg-transparent border border-slate-700 rounded-md text-[#2B2A4C]' name="" id="">
-                        <option value="">pending</option>
-                        <option value="">processing</option>
-                        <option value="">warehouse</option>
-                        <option value="">placed</option>
-                        <option value="">cancelled</option>
+                    <select onChange={update_status} value={status} className='px-4 py-2 focus:border-red-500 ouline-none bg-transparent border border-slate-700 rounded-md text-[#2B2A4C]' name="" id="">
+                        <option value="pending">pending</option>
+                        <option value="processing">processing</option>
+                        <option value="warehouse">warehouse</option>
+                        <option value="placed">placed</option>
+                        <option value="cancelled">cancelled</option>
                     </select>
                 </div>
                 <div className='p-4'>
                     <div className='flex gap-2 text-lg text-[#2B2A4C]'>
-                        <h2>#88783769836</h2>
-                        <span>10 july 2023</span>
+                        <h2>#{order._id}</h2>
+                        <span>{order.date}</span>
                     </div>
                     <div className='flex flex-wrap'>
                         <div className='w-[32%]'>
                             <div className='pr-3 text-[#2b2a4c] text-lg'>
                                 <div className='flex flex-col gap-1'>
-                                    <h2 className='pb-2 font-semibold'>Deliver to: Warehouse</h2>
+                                    <h2 className='pb-2 font-semibold'>Deliver to: {order.shippingInfo}</h2>
 
                                 </div>
                                 <div className='flex  justify-start items-center gap-3'>
                                     <h2>Payment Status: </h2>
-                                    <span className='text-base'>paid</span>
+                                    <span className='text-base'>{order.paymentStatus}</span>
                                 </div>
-                                <span>Price: 6799 vnd</span>
+                                <span>Price: {order.price && formatMoney(order?.price)} vnd</span>
                                 <div className='mt-4 flex flex-col gap-4'>
-                                    <div className='text-[#2B2A4C]'>
-                                        <div className='flex gap-3 text-md'>
-                                            <img className='w-[45px] h-[45px] rounded-md' src={logo_admin} alt="" />
-                                            <div>
-                                                <h2>long T-Shart</h2>
-                                                <p>
-                                                    <span>Brand: </span>
-                                                    <span>Easy </span>
-                                                    <span className='text-lg'>Quantity: 2</span>
-                                                </p>
+
+                                    {
+                                        order?.products?.map((el, i) =>
+                                            <div className='text-[#2B2A4C]'>
+                                                <div className='flex gap-3 text-md'>
+                                                    <img className='w-[45px] h-[45px] rounded-md' src={el?.images[0]} alt="" />
+                                                    <div>
+                                                        <h2>{el?.name}</h2>
+                                                        <p>
+                                                            <span>Brand: </span>
+                                                            <span>{el?.brand} </span>
+                                                            <span className='text-lg'>Quantity: {el?.quantity}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='flex gap-3 text-md'>
-                                            <img className='w-[45px] h-[45px] rounded-md' src={logo_admin} alt="" />
-                                            <div>
-                                                <h2>long T-Shart</h2>
-                                                <p>
-                                                    <span>Brand: </span>
-                                                    <span>Easy </span>
-                                                    <span className='text-lg'>Quantity: 2</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className='flex gap-3 text-md'>
-                                            <img className='w-[45px] h-[45px] rounded-md' src={logo_admin} alt="" />
-                                            <div>
-                                                <h2>long T-Shart</h2>
-                                                <p>
-                                                    <span>Brand: </span>
-                                                    <span>Easy </span>
-                                                    <span className='text-lg'>Quantity: 2</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        )
+                                    }
+
+
                                 </div>
                             </div>
                         </div>

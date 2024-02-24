@@ -1,5 +1,11 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { FixedSizeList as List } from 'react-window'
+import { toast } from 'react-hot-toast'
+import { HashLoader } from 'react-spinners'
+import moment from 'moment'
+import { formatMoney } from '../../store/helpers'
+import { confirm_payment_request, get_payment_request, get_seller_payment_details, messageClear, send_withdrawal_request } from '../../store/Reducers/paymentReducer';
+import { useDispatch, useSelector } from 'react-redux'
 function handleOnWheel({ deltaY }) {
     console.log('handleOnWheel: ', deltaY);
 
@@ -8,23 +14,46 @@ const outerElementType = forwardRef((props, ref) => (
     <div ref={ref} onWheel={handleOnWheel} {...props}></div>
 ))
 const PaymentRequest = () => {
+    const dispatch = useDispatch()
+    const [amount, setAmount] = useState(0)
+    const [id, setId] = useState('')
+    const { userInfo } = useSelector(state => state.auth)
+    const { successMessage, errorMessage, loader, pending_withdrawals } = useSelector(state => state.payment)
+    useEffect(() => {
+        dispatch(get_payment_request())
+    }, [])
+    const confirm_request = (id) => {
+        setId(id)
+        dispatch(confirm_payment_request(id))
+    }
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
 
+        }
+    }, [successMessage, errorMessage])
 
     const Row = ({ index, style }) => {
         return (
             <div style={style} className='flex text-sm'>
                 <div className='w-[25%] p-2 whitespace-nowrap'>{index + 1}</div>
-                <div className='w-[25%] p-2 whitespace-nowrap'>#5778</div>
+                <div className='w-[25%] p-2 whitespace-nowrap'>{formatMoney(pending_withdrawals[index]?.amount)}</div>
                 <div className='w-[25%] p-2 whitespace-nowrap'>
-                    <span className='py-[1px] px-[5px] text-emerald-700 '>pending</span>
+                    <span className='py-[1px] px-[5px] text-emerald-700 '>{pending_withdrawals[index]?.status}</span>
                 </div>
-                <div className='w-[25%] p-2 whitespace-nowrap'>10 july 2023</div>
+                <div className='w-[25%] p-2 whitespace-nowrap'>{moment(pending_withdrawals[index]?.createAt).format("DD/MM/YYYY")}</div>
                 <div className='w-[25%] p-2 whitespace-nowrap'>
-                    <button className=' text-center bg-emerald-700 px-3 py-[2px] cursor-pointer text-white rounded-md text-sm'>Confirm</button>
+                    <button disabled={loader} onClick={() => confirm_request(pending_withdrawals[index]?._id)} className=' text-center bg-emerald-700 px-3 py-[2px] cursor-pointer text-white rounded-md text-sm'>{(loader && id === pending_withdrawals[index]?._id) ? <HashLoader size={15} /> : 'Confirm'}</button>
                 </div>
             </div>
         )
     }
+
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4 bg-white shadow-md rounded-md'>
@@ -43,7 +72,7 @@ const PaymentRequest = () => {
                                 style={{ minWidth: '340px', overflowX: 'hidden' }}
                                 className='List'
                                 height={350}
-                                itemCount={10}
+                                itemCount={pending_withdrawals.length}
                                 itemSize={35}
                                 outerElementType={outerElementType}
                             >

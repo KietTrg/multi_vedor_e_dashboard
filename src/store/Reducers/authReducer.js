@@ -190,7 +190,7 @@ export const authReducer = createSlice({
     builder.addCase(get_user_info.fulfilled, (state, { payload }) => {
       state.loader = false;
       state.userInfo = payload.userInfo;
-      state.role = payload.userInfo.role;
+      state.role = payload.userInfo?.role;
     });
 
     builder.addCase(profile_image_upload.fulfilled, (state, { payload }) => {
