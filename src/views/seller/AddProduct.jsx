@@ -8,37 +8,13 @@ import { add_product, messageClear } from '../../store/Reducers/productReducer'
 import { toast } from 'react-hot-toast'
 import { overideStyle } from '../../utils/utils'
 import { HashLoader } from 'react-spinners'
+// import { formatMoney } from '../../store/helpers'
 const AddProduct = () => {
     const dispatch = useDispatch()
     const { categorys } = useSelector(state => state.category)
     const { successMessage, errorMessage, loader } = useSelector(state => state.product)
     const { userInfo } = useSelector(state => state.auth)
-    // const categorys = [
-    //     {
-    //         id: 1,
-    //         name: 'T-shirt'
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Shoe'
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Pant'
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Sport'
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Phone'
-    //     },
-    //     {
-    //         id: 6,
-    //         name: 'Watch'
-    //     },
-    // ]
+
     useEffect(() => {
         dispatch(get_categorys({
             searchValue: '',
@@ -162,36 +138,36 @@ const AddProduct = () => {
             <div className='w-full bg-white shadow-md p-4 rounded-md'>
                 <div className='flex justify-between items-center pb-4'>
                     <h1 className='text-[#2B2A4C] text-xl font-semibold'>Add Product</h1>
-                    <Link className='transition-all duration-500 bg-[#1D976C] px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'
-                        to='/seller/dashboard/all-product'>Products</Link>
+                    <Link className='transition-all duration-500 bg-[#739072] px-7 py-2 rounded-md my-2 text-white hover:bg-[#3a4d39]'
+                        to='/seller/dashboard/all-product'>All Products</Link>
                 </div>
                 <div>
                     <form onSubmit={add}>
                         <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#2B2A4C]'>
                             <div className='flex flex-col w-full gap-1'>
                                 <label htmlFor="name">Product name</label>
-                                <input className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                                <input required className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={state.name} type="text" name="name" id="name" placeholder='product name' />
                             </div>
                             <div className='flex flex-col w-full gap-1'>
                                 <label htmlFor="brand">Product brand</label>
-                                <input className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                                <input required className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={state.brand} type="text" name="brand" id="brand" placeholder='product brand' />
                             </div>
                         </div>
                         <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#2B2A4C'>
                             <div className='flex flex-col w-full gap-1 relative'>
                                 <label htmlFor="category">Category</label>
-                                <input readOnly onClick={() => setCateShow(!cateShow)} className=' text-[#2A2B4C] px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md  focus:border-[#FF494C] overflow-hidden'
+                                <input required readOnly onClick={() => setCateShow(!cateShow)} className=' text-[#2A2B4C] px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md  focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={category} type="text" id="category" placeholder='product category' />
                                 <div className={`absolute top-[101%] bg-gray-100 rounded-md shadow-md w-full transition-all ${cateShow ? ' scale-100' : 'scale-0'}`}>
                                     <div className=' w-full px-4 py-2 fixed'>
-                                        <input value={searchValue} onChange={categorySearch} className='text-[#2A2B4C] px-3 w-full py-2 outline-none border bg-transparent border-slate-700 rounded-md  focus:border-[#FF494C] overflow-hidden'
+                                        <input value={searchValue} onChange={categorySearch} className='text-[#2A2B4C] px-3 w-full py-2 outline-none border bg-transparent border-slate-700 rounded-md  focus:border-green-500 overflow-hidden'
                                             type="text" placeholder='search' />
                                     </div>
                                     <div className='pt-14'></div>
                                     <div className='flex justify-start items-start flex-col h-[200px] overflow-x-scroll'>
-                                        {allCategory.map((el, key) => <span className={`px-4 py-2 hover:bg-[#ffe7e7] hover:shadow-md cursor-pointer w-full ${category === el.name && 'bg-[#ffe7e7]'}`} onClick={() => {
+                                        {allCategory.map((el, key) => <span className={`px-4 py-2 hover:bg-[#D0E7D2] hover:shadow-md cursor-pointer w-full ${category === el.name && 'bg-[#D0E7D2]'}`} onClick={() => {
                                             setCateShow(false)
                                             setCategory(el.name)
                                             setSearchValue('')
@@ -202,26 +178,26 @@ const AddProduct = () => {
                             </div>
                             <div className='flex flex-col w-full gap-1'>
                                 <label htmlFor="stock">Stock</label>
-                                <input className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                                <input required className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={state.stock} type="number" min='0' name="stock" id="stock" placeholder='product stock' />
                             </div>
                         </div>
                         <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-[#2B2A4C'>
                             <div className='flex flex-col w-full gap-1'>
                                 <label htmlFor="price">Price</label>
-                                <input className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                                <input required className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={state.price} type="number" min='0' name="price" id="price" placeholder='price' />
                             </div>
                             <div className='flex flex-col w-full gap-1'>
                                 <label htmlFor="discount">Discount</label>
-                                <input className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                                <input required className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                     onChange={inputHandle} value={state.discount} type="number" min='0' name="discount" id="discount" placeholder='discount %' />
                             </div>
                         </div>
 
                         <div className='flex flex-col w-full gap-1 mb-5'>
                             <label htmlFor="description">Description</label>
-                            <textarea rows={8} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden'
+                            <textarea required rows={8} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden'
                                 onChange={inputHandle} value={state.description} type="number" min='0' name="description" id="price" placeholder='description' />
                         </div>
 
@@ -232,17 +208,17 @@ const AddProduct = () => {
                                         <img className='w-full h-full rounded-md' src={el.url} alt="" />
                                     </label>
                                     <input onChange={(e) => changeImage(e.target.files[0], index)} type="file" id={index} className='hidden' />
-                                    <span className=' absolute top-1 right-1 p-2 z-10 cursor-pointer hover:bg-[#FF494C] hover:text-white bg-white rounded-full transition-all duration-300' onClick={() => removeImage(index)}><IoMdClose /></span>
+                                    <span className=' absolute top-1 right-1 p-2 z-10 cursor-pointer hover:bg-green-500 hover:text-white bg-white rounded-full transition-all duration-300' onClick={() => removeImage(index)}><IoMdClose /></span>
                                 </div>)
                             }
-                            <label className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed border-black hover:border-red-700 w-full text-[#2a2b4c]' htmlFor="image">
+                            <label className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed border-black hover:border-green-500 w-full text-[#2a2b4c]' htmlFor="image">
                                 <span><BsImage></BsImage></span>
                                 <span>Select Image</span>
                             </label>
-                            <input multiple onChange={imageHandle} className='hidden' type="file" id="image" />
+                            <input required multiple onChange={imageHandle} className='hidden' type="file" id="image" />
                         </div>
                         <div className='flex mt-4'>
-                            <button className=' transition-all duration-500 bg-[#1D976C]  w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'> {
+                            <button className=' transition-all duration-500 bg-[#739072]   w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#3a4d39]'> {
                                 loader ?
                                     <HashLoader cssOverride={overideStyle} size='25' color='#fff' /> : 'Add Product'}
                             </button>

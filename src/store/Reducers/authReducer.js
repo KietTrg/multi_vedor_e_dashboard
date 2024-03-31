@@ -112,7 +112,7 @@ export const profile_info_add = createAsyncThunk(
     }
   }
 );
-
+//////////////////role//////////
 const returnRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);
@@ -193,6 +193,14 @@ export const authReducer = createSlice({
       state.role = payload.userInfo?.role;
     });
 
+    builder.addCase(profile_image_upload.pending, (state, { payload }) => {
+      state.loader = true;
+    });
+    builder.addCase(profile_image_upload.rejected, (state, { payload }) => {
+      state.loader = false;
+
+      state.errorMessage = payload.message;
+    });
     builder.addCase(profile_image_upload.fulfilled, (state, { payload }) => {
       state.loader = false;
       state.userInfo = payload.userInfo;

@@ -8,7 +8,7 @@ export const get_customers = createAsyncThunk(
       const { data } = await api.get(`/chat/seller/get-customers/${sellerId}`, {
         withCredentials: true,
       });
-      console.log("data: ", data);
+      // console.log("data: ", data);
 
       return fulfillWithValue(data);
     } catch (error) {
@@ -24,7 +24,7 @@ export const get_customer_message = createAsyncThunk(
         `/chat/seller/get_customer_message/${customerId}`,
         { withCredentials: true }
       );
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log("error: ", error);
@@ -58,7 +58,7 @@ export const get_sellers = createAsyncThunk(
       const { data } = await api.get(`/chat/admin/get-sellers`, {
         withCredentials: true,
       });
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log("error: ", error);
@@ -73,7 +73,7 @@ export const send_message_seller_admin = createAsyncThunk(
       const { data } = await api.post(`/chat/send-message-seller-admin`, info, {
         withCredentials: true,
       });
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log("error: ", error);
@@ -88,7 +88,7 @@ export const get_admin_message = createAsyncThunk(
       const { data } = await api.get(`/chat/get-admin-message/${receverId}`, {
         withCredentials: true,
       });
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log("error: ", error);
@@ -103,7 +103,7 @@ export const get_seller_message = createAsyncThunk(
       const { data } = await api.get(`/chat/get-seller-message`, {
         withCredentials: true,
       });
-      console.log("data: ", data);
+      // console.log("data: ", data);
       return fulfillWithValue(data);
     } catch (error) {
       console.log("error: ", error);

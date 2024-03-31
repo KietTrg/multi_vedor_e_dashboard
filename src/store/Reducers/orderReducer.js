@@ -115,12 +115,27 @@ export const get_seller_order = createAsyncThunk(
     }
   }
 );
+export const add_shipping = createAsyncThunk(
+  "order/add_shipping",
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post("/admin/add-shipping", info, {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 export const orderReducer = createSlice({
   name: "order",
   initialState: {
     successMessage: "",
     errorMessage: "",
     totalOrder: 0,
+    shipping_fee: 0,
+    fee: 0,
     order: {},
     myOrders: [],
   },
@@ -134,6 +149,7 @@ export const orderReducer = createSlice({
     builder.addCase(get_admin_orders.fulfilled, (state, { payload }) => {
       state.myOrders = payload.orders;
       state.totalOrder = payload.totalOrders;
+      state.fee = payload.fee;
     });
     builder.addCase(get_admin_order.fulfilled, (state, { payload }) => {
       state.order = payload.order;
@@ -150,6 +166,11 @@ export const orderReducer = createSlice({
         state.successMessage = payload.message;
       }
     );
+    builder.addCase(add_shipping.fulfilled, (state, { payload }) => {
+      state.shipping_fee = payload.shipping_fee;
+      state.successMessage = payload.message;
+    });
+
     //seller
     builder.addCase(get_seller_orders.fulfilled, (state, { payload }) => {
       state.myOrders = payload.orders;

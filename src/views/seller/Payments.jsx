@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { formatMoney } from '../../store/helpers'
 import { FixedSizeList as List } from 'react-window'
+import { LiaMoneyBillWaveAltSolid } from "react-icons/lia";
 import { toast } from 'react-hot-toast'
 import { HashLoader } from 'react-spinners'
 import moment from 'moment'
@@ -58,6 +59,7 @@ const Payments = () => {
         e.preventDefault()
         console.log('e.preventDefault(): ', amount);
         dispatch(send_withdrawal_request({ amount, sellerId: userInfo._id }))
+        setAmount(0)
     }
     const RowSuccess = ({ index, style }) => {
         return (
@@ -81,7 +83,7 @@ const Payments = () => {
                         <span className='text-md font-medium'>Total Sales</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#28c76f1f] flex justify-center items-center text-xl'>
-                        <span className='text-[#28c76f]'>VNĐ</span>
+                        <LiaMoneyBillWaveAltSolid size={25} className='text-[#28c76f]'></LiaMoneyBillWaveAltSolid>
                     </div>
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
@@ -90,7 +92,7 @@ const Payments = () => {
                         <span className='text-md font-medium'>Available Amount</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#e000e81f] flex justify-center items-center text-xl'>
-                        <span className='text-[#cd00e8]'>VNĐ</span>
+                        <LiaMoneyBillWaveAltSolid size={25} className='text-[#cd00e8]'></LiaMoneyBillWaveAltSolid>
                     </div>
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
@@ -99,7 +101,7 @@ const Payments = () => {
                         <span className='text-md font-medium'>Withdrawal Amount</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#00cfe81f] flex justify-center items-center text-xl'>
-                        <span className='text-[#00cfe8]'>VNĐ</span>
+                        <LiaMoneyBillWaveAltSolid size={25} className='text-[#00cfe8]'></LiaMoneyBillWaveAltSolid>
                     </div>
                 </div>
                 <div className='flex justify-between items-center p-5 shadow-md bg-white rounded-md gap-3'>
@@ -108,7 +110,7 @@ const Payments = () => {
                         <span className='text-md font-medium'>Pending Amount</span>
                     </div>
                     <div className='w-[54px] h-[54px] rounded-full bg-[#7367f01f] flex justify-center items-center text-xl'>
-                        <span className='text-[#7367f0]'>VNĐ</span>
+                        <LiaMoneyBillWaveAltSolid size={25} className='text-[#7367f0]'></LiaMoneyBillWaveAltSolid>
 
                     </div>
                 </div>
@@ -119,16 +121,16 @@ const Payments = () => {
                     <div className='py-5'>
                         <form onSubmit={sendRequest}>
                             <div className='flex gap-3 flex-wrap'>
-                                <input onChange={(e) => setAmount(e.target.value)} required value={amount} className=' md:w-[79%] px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-[#FF494C] overflow-hidden '
+                                <input onChange={(e) => setAmount(e.target.value)} required value={amount} className=' md:w-[79%] px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#2a2b4c] focus:border-green-500 overflow-hidden '
                                     type="number" min='0' name='amount' />
-                                <button disabled={loader} className=' transition-all duration-500 bg-[#1D976C]  px-4 py-2 rounded-md  text-white hover:bg-[#0f6647]'>{loader ? <HashLoader></HashLoader> : 'Submit'}</button>
+                                <button disabled={loader} className=' transition-all duration-500 bg-[#739072]  px-4 py-2 rounded-md  text-white hover:bg-[#3a4d39]'>{loader ? <HashLoader></HashLoader> : 'Send'}</button>
                             </div>
                         </form>
                     </div>
                     <div>
-                        <h2 className='text-[#2a2b4c] font-semibold text-lg'>Pending request</h2>
+                        <h2 className='text-[#2a2b4c] font-semibold text-lg pb-4'>Pending request</h2>
                         <div className='w-full overflow-x-auto'>
-                            <div className='flex bg-[#ffe7e7] uppercase text-xs min-w-[340px]'>
+                            <div className='flex bg-[#D0E7D2] uppercase text-xs min-w-[340px] rounded-md'>
                                 <div className='w-[25%] p-2'>No</div>
                                 <div className='w-[25%] p-2'>Amount</div>
                                 <div className='w-[25%] p-2'>Status</div>
@@ -154,9 +156,9 @@ const Payments = () => {
 
                 <div className='p-5 shadow-md bg-white rounded-md'>
                     <div>
-                        <h2 className='text-[#2a2b4c] font-semibold text-lg pb-4'>Success Widrawal</h2>
+                        <h2 className='text-[#2a2b4c] font-semibold text-lg pb-4'>Success Withdrawal</h2>
                         <div className='w-full overflow-x-auto'>
-                            <div className='flex bg-[#ffe7e7] uppercase text-xs min-w-[340px]'>
+                            <div className='flex bg-[#D0E7D2] uppercase text-xs min-w-[340px] rounded-md'>
                                 <div className='w-[25%] p-2'>No</div>
                                 <div className='w-[25%] p-2'>Amount</div>
                                 <div className='w-[25%] p-2'>Status</div>

@@ -48,7 +48,7 @@ const PaymentRequest = () => {
                 </div>
                 <div className='w-[25%] p-2 whitespace-nowrap'>{moment(pending_withdrawals[index]?.createAt).format("DD/MM/YYYY")}</div>
                 <div className='w-[25%] p-2 whitespace-nowrap'>
-                    <button disabled={loader} onClick={() => confirm_request(pending_withdrawals[index]?._id)} className=' text-center bg-emerald-700 px-3 py-[2px] cursor-pointer text-white rounded-md text-sm'>{(loader && id === pending_withdrawals[index]?._id) ? <HashLoader size={15} /> : 'Confirm'}</button>
+                    <button disabled={loader} onClick={() => confirm_request(pending_withdrawals[index]?._id)} className=' transition-all duration-500 bg-[#739072]  px-4  rounded-md  text-white hover:bg-[#3a4d39]'>{(loader && id === pending_withdrawals[index]?._id) ? <HashLoader size={15} /> : 'Confirm'}</button>
                 </div>
             </div>
         )
@@ -57,10 +57,10 @@ const PaymentRequest = () => {
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4 bg-white shadow-md rounded-md'>
-                <h2 className='text-xl font-medium pb-5 text-[#2B2A4C]'>Withdrawl request</h2>
+                <h2 className='text-xl font-medium pb-5 text-[#2B2A4C]'>Withdrawal request</h2>
                 <div className='w-full'>
                     <div className='w-full overflow-x-auto'>
-                        <div className='flex bg-[#ffe7e7] uppercase text-xs min-w-[340px]'>
+                        <div className='flex bg-[#D0E7D2] rounded-md font-medium uppercase text-xs min-w-[340px]'>
                             <div className='w-[25%] p-2'>No</div>
                             <div className='w-[25%] p-2'>Amount</div>
                             <div className='w-[25%] p-2'>Status</div>

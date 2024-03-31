@@ -93,7 +93,7 @@ const Category = () => {
         <div className='px-2 lg:px-7 pt-5'>
             <div className='flex lg:hidden justify-between items-center mb-5 p-4 bg-white shadow-md rounded-md'>
                 <h1 className='text-[#2B2A4C] font-semibold text-sm'>Categorys</h1>
-                <button onClick={() => setShow(true)} className='bg-red-500 shadow-lg px-4 py-2 cursor-pointer text-white rounded-md text-sm'>Add Category</button>
+                <button onClick={() => setShow(true)} className='transition-all duration-500 bg-[#739072] hover:bg-[#3a4d39] shadow-lg px-4 py-2 cursor-pointer text-white rounded-md text-sm'>Add Category</button>
             </div>
             <div className='flex flex-wrap w-full'>
                 <div className='w-full lg:w-7/12'>
@@ -101,7 +101,7 @@ const Category = () => {
                         <Search setParPage={setParPage} searchValue={searchValue} setSearchValue={setSearchValue} />
                         <div className='relative overflow-x-auto'>
                             <table className='w-full text-sm text-left text-[#2B2A4C]'>
-                                <thead className='text-sm text-[#2B2A4C] uppercase border-b border-red-700'>
+                                <thead className='text-sm text-[#2B2A4C] uppercase border-b border-[#3a4d39]'>
                                     <tr>
                                         <th scope='col' className='py-3 px-4'>No</th>
                                         <th scope='col' className='py-3 px-4'>Image</th>
@@ -143,7 +143,7 @@ const Category = () => {
                         </div>
                     </div>
                 </div>
-                <div className={`w-[320px] lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${show ? 'right-0' : '-right-[340px]'} z-10 top-0 transition-all duration-500 `}>
+                <div className={`w-[320px] lg:w-5/12 translate-x-100 lg:relative lg:right-0 fixed ${show ? 'right-0' : '-right-[340px]'} z-[9999] top-0 transition-all duration-500 `}>
                     <div className='w-full pl-5'>
                         <div className=' bg-white shadow-md rounded-md h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#2B2A4C]'>
                             <div className='flex justify-between items-center mb-4'>
@@ -168,7 +168,7 @@ const Category = () => {
                                     </label>
                                     <input required onChange={imageHandle} className='hidden' type="file" name='image' id='image' />
                                     <div className='mt-4'>
-                                        <button className=' transition-all duration-500 bg-[#1D976C]  w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#0f6647]'> {
+                                        <button className=' transition-all duration-500 bg-[#739072] w-full px-7 py-2 rounded-md my-2 text-white hover:bg-[#3a4d39]'> {
                                             loader ?
                                                 <HashLoader cssOverride={overideStyle} size='25' color='#fff' /> : 'Add Category'}
                                         </button>

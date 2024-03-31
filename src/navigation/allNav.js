@@ -95,13 +95,6 @@ export const allNav = [
     role: "seller",
     path: "/seller/dashboard/all-product",
   },
-  {
-    id: 12,
-    title: "Discount Product",
-    icon: <TbDiscount size={25} />,
-    role: "seller",
-    path: "/seller/dashboard/discount-product",
-  },
 
   {
     id: 14,

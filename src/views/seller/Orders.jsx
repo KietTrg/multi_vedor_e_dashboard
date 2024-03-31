@@ -31,8 +31,8 @@ const Orders = () => {
             <div className='w-full bg-white shadow-md p-4 rounded-md'>
                 <Search setParPage={setParPage} searchValue={searchValue} setSearchValue={setSearchValue}></Search>
                 <div className='relative overflow-x-auto mt-5'>
-                    <table className='w-full text-sm text-left text-[#2B2A4C]'>
-                        <thead className='text-sm text-[#2B2A4C] uppercase border-b border-red-700'>
+                    <table className='w-full text-sm text-left '>
+                        <thead className='text-sm  uppercase border-b border-[#3a4d39]'>
                             <tr>
                                 <th scope='col' className='py-3 px-4'>Order Id</th>
                                 <th scope='col' className='py-3 px-4'>Price (Vnd)</th>
@@ -45,12 +45,13 @@ const Orders = () => {
                         <tbody>
                             {
                                 myOrders.map((el, key) => <tr key={key}>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>#{el._id}</td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>{formatMoney(el?.price)}</td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.paymentStatus}</span></td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.deliveryStatus}</span></td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'><span>{el.date}</span></td>
-                                    <td scope='row' className='py-3 px-4 font-medium whitespace-nowrap'>                                            <Link to={`/seller/dashboard/order/details/${el._id}`}><LuEye color='#3e59e1' size={17} /></Link>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'>#{el._id}</td>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'>{formatMoney(el?.price)}</td>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'><span className={`${el.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-500'}`}>{el.paymentStatus}</span></td>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'><span>{el.deliveryStatus}</span></td>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'><span>{el.date}</span></td>
+                                    <td scope='row' className='py-3 px-4 font-normal whitespace-nowrap'>
+                                        <Link className='transition-all duration-300 hover:text-green-500' to={`/seller/dashboard/order/details/${el._id}`}>View</Link>
                                     </td>
                                 </tr>)
                             }

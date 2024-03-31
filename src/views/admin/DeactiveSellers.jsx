@@ -24,19 +24,19 @@ const DeactiveSellers = () => {
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4 bg-white shadow-md rounded-md'>
+                <div className='flex justify-between items-center'>
+                    <select onChange={(e) => setParPage(parseInt(e.target.value))} className='px-4 py-2 focus:border-green-500 ouline-none bg-transparent border border-slate-700 rounded-md '>
+                        <option value="5">5</option>
+                        <option value="15">15</option>
+                        <option value="25">25</option>
+                    </select>
+                    <input onChange={e => setSearchValue(e.target.value)} value={searchValue} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md  focus:border-green-500  overflow-hidden' type="text" name='search' placeholder='search' />
+                </div>
                 {sellers.length > 0 ?
                     <>
-                        <div className='flex justify-between items-center'>
-                            <select onChange={(e) => setParPage(parseInt(e.target.value))} className='px-4 py-2 focus:border-red-500 ouline-none bg-transparent border border-slate-700 rounded-md text-[#2B2A4C]'>
-                                <option value="5">5</option>
-                                <option value="5">15</option>
-                                <option value="5">25</option>
-                            </select>
-                            <input onChange={e => setSearchValue(e.target.value)} value={searchValue} className='px-3 py-2 outline-none border bg-transparent border-slate-700 rounded-md text-[#d0d2d6] focus:border-[#FF494C] overflow-hidden' type="text" name='search' placeholder='search' />
-                        </div>
                         <div className='relative overflow-x-auto'>
-                            <table className='w-full text-sm text-left text-[#2B2A4C]'>
-                                <thead className='text-sm text-[#2B2A4C] uppercase border-b border-red-700'>
+                            <table className='w-full text-sm text-left '>
+                                <thead className='text-sm  uppercase border-b border-[#3a4d39]'>
                                     <tr>
                                         <th scope='col' className='py-3 px-4'>No</th>
                                         <th scope='col' className='py-3 px-4'>Image</th>
@@ -72,9 +72,11 @@ const DeactiveSellers = () => {
                                                  px-4 font-medium whitespace-nowrap'><span>{el.shopInfo.District}</span></td>
                                             <td scope='row' className='py-3
                                                  px-4 font-medium'>
-                                                <div className='flex justify-start  items-center gap-4'>
-                                                    <Link to={`/admin/dashboard/sellers/detail/${el._id}`}><LuEye color='#3e59e1' size={17} /></Link>
+
+                                                <div className='flex justify-start cursor-pointer hover:text-green-500 transition-all duration-300 items-center gap-4'>
+                                                    <Link to={`/admin/dashboard/sellers/detail/${el._id}`}>View</Link>
                                                 </div>
+
                                             </td>
                                         </tr>)
                                     }

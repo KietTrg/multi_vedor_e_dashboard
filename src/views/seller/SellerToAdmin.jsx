@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import logo_admin from '../../assets/admin.jpg'
 import { IoMdClose } from 'react-icons/io'
-import { FaList } from 'react-icons/fa'
+import { LuSendHorizonal } from "react-icons/lu";
 import { send_message_seller_admin, updateAdminMessage, messageClear, get_seller_message } from '../../store/Reducers/chatReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { socket } from '../../utils/utils'
 const SellerToAdmin = () => {
+    const scrollRef = useRef()
     const dispatch = useDispatch()
     const [show, setShow] = useState(false)
     const [text, setText] = useState('')
@@ -13,11 +14,12 @@ const SellerToAdmin = () => {
     const sellerId = 32
     const { seller_admin_message, successMessage, activeAdmin } = useSelector(state => state.chat)
     const { userInfo } = useSelector(state => state.auth)
-    console.log('userInfo: ', userInfo);
+    // console.log('userInfo: ', userInfo);
     // console.log('seller_admin_message: ', seller_admin_message);
     useEffect(() => {
         dispatch(get_seller_message(""))
     }, [])
+
     const send = (e) => {
         e.preventDefault()
         dispatch(send_message_seller_admin({
@@ -28,17 +30,25 @@ const SellerToAdmin = () => {
         }))
         setText('')
     }
+
     useEffect(() => {
         socket.on('receved_admin_message', message => {
             dispatch(updateAdminMessage(message))
         })
     }, [])
+
     useEffect(() => {
         if (successMessage) {
             socket.emit('send_message_seller_to_admin', seller_admin_message[seller_admin_message.length - 1])
             dispatch(messageClear())
         }
     }, [successMessage])
+
+    useEffect(() => {
+        dispatch(get_seller_message(""))
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, [seller_admin_message])
+
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4 bg-white shadow-md rounded-md h-[calc(100vh-140px)]'>
@@ -54,7 +64,7 @@ const SellerToAdmin = () => {
                                     </div>
                                     <div className='flex justify-center items-start flex-col w-full'>
                                         <div className='flex justify-center items-center'>
-                                            <h2 className='text-[#2B2A4C] text-base font-semibold'>Support</h2>
+                                            <h2 className='text-[#2B2A4C] text-base font-semibold'>Admin Support</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -69,28 +79,29 @@ const SellerToAdmin = () => {
                                     seller_admin_message.map((el, i) => {
                                         if (userInfo._id !== el.senderId) {
                                             return (
-                                                <div key={i} className='w-full flex justify-start items-center'>
-                                                    <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
-                                                        <img className='  border-red-700 border-2 max-w-[38px] p-[2px] rounded-full w-[38px] h-[38px]' src={logo_admin} alt="" />
+                                                <div ref={scrollRef} key={i} className='w-full flex justify-start items-center'>
+                                                    <div className='flex justify-start items-center gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
+                                                        <img className=' max-w-[48px] p-[2px] rounded-full w-[48px] h-[48px]' src={logo_admin} alt="" />
 
-                                                        <div className='py-2 px-3 rounded-md flex justify-center items-start flex-col w-full bg-[#e95353]'>
+                                                        <div className='py-2 px-5 rounded-full flex justify-center items-start flex-col w-full bg-gray-400'>
 
                                                             <span className='text-white text-base font-light'>{el.message} </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             )
+
                                         } else {
                                             return (
-                                                <div key={i} className='w-full flex justify-end items-center'>
+                                                <div ref={scrollRef} key={i} className='w-full flex justify-end items-center'>
                                                     <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
-                                                        <div className='py-1 px-2 rounded-md flex justify-center items-end flex-col w-full bg-gray-600'>
+                                                        <div className='py-1 px-3 rounded-full flex justify-center items-end flex-col w-full bg-[#739072]'>
                                                             <span className='text-white text-base font-light'>{el.message} </span>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <img className='  border-red-700 border-2 max-w-[38px] p-[2px] rounded-full w-[38px] h-[38px]' src={logo_admin} alt="" />
-                                                    </div>
+                                                    {/* <div>
+                                                        <img className='border-green-700 border-2 max-w-[38px] p-[2px] rounded-full w-[38px] h-[38px]' src={logo_admin} alt="" />
+                                                    </div> */}
                                                 </div>
                                             )
                                         }
@@ -103,8 +114,8 @@ const SellerToAdmin = () => {
                             </div>
                         </div>
                         <form onSubmit={send} className='flex gap-3'>
-                            <input onChange={(e) => setText(e.target.value)} value={text} type="text" placeholder='input your message' className='w-[calc(100%-150px)] border border-slate-700 px-4 py-2 rounded-md outline-none focus:border-red-700 bg-transparent text-[#2B2A4C] ' />
-                            <button className='w-[150px] transition-all duration-500 bg-[#1D976C]  px-7 py-2 rounded-md  text-white hover:bg-[#0f6647]'>Send</button>
+                            <input onChange={(e) => setText(e.target.value)} value={text} type="text" placeholder='input your message' className='w-[calc(100%-50px)] border border-slate-700 px-4 py-2 rounded-md outline-none focus:border-green-500 bg-transparent text-[#2B2A4C] ' />
+                            <button className='w-[50px] transition-all duration-500 bg-[#739072]  px-3 py-2 rounded-md  text-white hover:bg-[#3a4d39]'><LuSendHorizonal size={25} /></button>
                         </form>
                     </div>
                 </div>
