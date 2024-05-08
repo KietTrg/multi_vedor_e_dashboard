@@ -61,15 +61,15 @@ const DeactiveSellers = () => {
                                             <td scope='row' className='py-3
                                                  px-4 font-medium whitespace-nowrap'><span>{el.name}</span></td>
                                             <td scope='row' className='py-3
-                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo.shopName}</span></td>
+                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo?.shopName}</span></td>
                                             <td scope='row' className='py-3
-                                                 px-4 font-medium whitespace-nowrap'><span>{el.payment}</span></td>
+                                                 px-4 font-medium whitespace-nowrap'><span>{el?.payment}</span></td>
                                             <td scope='row' className='py-3
-                                                 px-4 font-medium whitespace-nowrap'><span>{el.email}</span></td>
+                                                 px-4 font-medium whitespace-nowrap'><span>{el?.email}</span></td>
                                             <td scope='row' className='py-3
-                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo.Division}</span></td>
+                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo?.Division}</span></td>
                                             <td scope='row' className='py-3
-                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo.District}</span></td>
+                                                 px-4 font-medium whitespace-nowrap'><span>{el.shopInfo?.District}</span></td>
                                             <td scope='row' className='py-3
                                                  px-4 font-medium'>
 

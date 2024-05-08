@@ -88,10 +88,6 @@ const SellerToCustomer = () => {
                             {
                                 customers.map((e, i) =>
                                     <Link key={i} to={`/seller/dashboard/chat-customer/${e.friendId}`} className={`h-10 flex justify-start gap-2 items-center px-2 ${customerId === e.friendId ? ' bg-[#ffe7e7] rounded-md' : ''}`}>
-                                        {/* <div className=' relative '>
-                                            <img className=' border-red-700 border-2 max-w-[38px] p-[2px] rounded-full w-[38px] h-[38px]' src={e.image} alt="" />
-                                            <div className='w-[10px] h-[10px] bg-green-500 rounded-full right-0 bottom-0 absolute'></div>
-                                        </div> */}
                                         <div className='flex justify-center items-start flex-col w-full'>
                                             <div className='flex justify-center items-center'>
                                                 <h2 className=' text-base font-semibold'>{e.name}</h2>
@@ -105,27 +101,28 @@ const SellerToCustomer = () => {
                     </div>
                     <div className='w-full md:w-[calc(100%-200px)] '>
                         <div className=' w-full shadow-md'>
-                            {customerId && <div className='flex justify-between items-center  p-2'>
-                                {
-                                    customerId && <div className='flex justify-start items-center gap-3'>
+                            {
+                                customerId && <div className='flex justify-between items-center  p-2'>
+                                    {
+                                        customerId && <div className='flex justify-start items-center gap-3'>
 
-                                        <div className='flex justify-center items-start flex-col w-full'>
-                                            <div className='flex flex-col gap-2 justify-center items-start'>
-                                                <h2 className='text-[#2B2A4C] text-base font-semibold'>{currentCustomer.name}</h2>
-                                                {activeCustomer.some(e => e.customerId === customerId) &&
-                                                    <div className='flex items-center gap-2'>
-                                                        <span className='text-gray-400 text-xs'>Đang hoạt động</span>
-                                                        <div className='w-[8px] h-[8px] bg-green-500 rounded-full right-0 bottom-0 '></div>
-                                                    </div>
-                                                }
+                                            <div className='flex justify-center items-start flex-col w-full'>
+                                                <div className='flex flex-col gap-2 justify-center items-start'>
+                                                    <h2 className='text-[#2B2A4C] text-base font-semibold'>{currentCustomer.name}</h2>
+                                                    {activeCustomer.some(e => e.customerId === customerId) &&
+                                                        <div className='flex items-center gap-2'>
+                                                            <span className='text-gray-400 text-xs'>Đang hoạt động</span>
+                                                            <div className='w-[8px] h-[8px] bg-green-500 rounded-full right-0 bottom-0 '></div>
+                                                        </div>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
+                                    }
+                                    <div onClick={() => setShow(!show)} className=' w-[35px] flex lg:hidden h-[35px] rounded-sm bg-[#FFC5C5] shadow-lg hover:shadow-red-500/50 cursor-pointer items-center justify-center'>
+                                        <FaList />
                                     </div>
-                                }
-                                <div onClick={() => setShow(!show)} className=' w-[35px] flex lg:hidden h-[35px] rounded-sm bg-[#FFC5C5] shadow-lg hover:shadow-red-500/50 cursor-pointer items-center justify-center'>
-                                    <FaList />
-                                </div>
-                            </div>}
+                                </div>}
                         </div>
                         <div className='py-4'>
                             <div className='  rounded-md h-[calc(100vh-290px)] p-3 overflow-y-auto'>
@@ -152,20 +149,12 @@ const SellerToCustomer = () => {
                                                         <span className='text-white text-base font-light'>{e.message}</span>
                                                     </div>
                                                 </div>
-                                                {/* <div>
-                                                    <img className='  border-red-700 border-2 max-w-[38px] p-[2px] rounded-full w-[38px] h-[38px]' src={userInfo.image} alt="" />
-                                                </div> */}
                                             </div>
                                         )
                                     }
                                 }
                                 ) : <div className='h-full w-full justify-center items-center flex'>Select Customer</div>
                                 }
-
-
-
-
-
                             </div>
                         </div>
                         <form onSubmit={send} className='flex gap-3 mx-2'>
